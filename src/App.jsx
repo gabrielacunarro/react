@@ -9,9 +9,8 @@ function App() {
   return (
     <div className="App">
       <NavBar />
-      <ItemListContainer greeting ="Hi!"/>
+      <ItemListContainer greeting="Hi!" />
     </div>
   );
 }
-
 export default App;
