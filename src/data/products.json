@@ -1,0 +1,26 @@
+[
+  {
+    "id": 1,
+    "image": "https://i.imgur.com/xrTSx2n.png",
+    "title": "Perfume",
+    "price": 100
+  },
+  {
+    "id": 2,
+    "image": "https://i.imgur.com/iWjXxtE.png",
+    "title": "Maquillaje",
+    "price": 50
+  },
+  {
+    "id": 3,
+    "image": "https://i.imgur.com/533uoGW.png",
+    "title": "Crema",
+    "price": 45
+  },
+  {
+    "id": 4,
+    "image": "https://i.imgur.com/dN6cAvM.png",
+    "title": "Spray corporal",
+    "price": 25
+  }
+]

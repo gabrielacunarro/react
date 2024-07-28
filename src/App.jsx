@@ -4,13 +4,19 @@ import "bootstrap-icons/font/bootstrap-icons.css";
 import "./App.css";
 import NavBar from "./components/navbar.jsx";
 import { ItemListContainer } from "./components/ItemListContainer.jsx";
+import { ProductDetail } from "./views/productDetail.jsx";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 
 function App() {
   return (
-    <div className="App">
+    <BrowserRouter>
       <NavBar />
-      <ItemListContainer greeting="Hi!" />
-    </div>
+      <Routes>
+        <Route path = "/" element= {<ItemListContainer/>}></Route>
+        <Route path = "products/:id" element= {<ProductDetail/>}></Route>
+      </Routes>
+    </BrowserRouter>
   );
 }
+
 export default App;
