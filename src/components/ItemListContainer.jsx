@@ -1,31 +1,44 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { Link, useParams } from "react-router-dom";
 import data from "../data/products.json";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { Container } from "react-bootstrap";
+import ReactLoading from 'react-loading';
 
 export const ItemListContainer = () => {
   const [items, setItems] = useState([]);
   const [loading, setLoading] = useState(true);
-  const { id } = useParams(); // Obtener el categoryId de los parámetros de la ruta
+  const { id } = useParams();
 
   useEffect(() => {
-    new Promise((resolve, reject) => {
+    new Promise((resolve) => {
       setTimeout(() => resolve(data), 2000);
-    }).then((res) => {
-      console.log({ res });
-      const filteredProducts = id ? res.filter(product => product.categoryId === Number(id)) : res;
-      setItems(filteredProducts);
-    }).finally(() => setLoading(false));
+    })
+      .then((res) => {
+        const filteredProducts = id
+          ? res.filter((product) => product.categoryId === Number(id))
+          : res;
+        setItems(filteredProducts);
+      })
+      .finally(() => {
+        setLoading(false);
+      });
   }, [id]);
 
-  if (loading) return <Container className="mt-4">Loading...</Container>;
+  if (loading) {
+    return (
+      <Container className="text-center mt-4">
+        <ReactLoading type="spin" color="#000" />
+      </Container>
+    );
+  }
 
-  if (items.length === 0)
-    return <Container className="mt-4">There aren't any products yet...</Container>;
+  if (items.length === 0) {
+    return <Container className="text-center mt-4">There arent any products yet...</Container>;
+  }
 
   return (
-    <div className="container">
+    <Container className="mt-4">
       <div className="row">
         {items.map((item) => (
           <div key={item.id} className="col-md-4 mb-4">
@@ -46,6 +59,6 @@ export const ItemListContainer = () => {
           </div>
         ))}
       </div>
-    </div>
+    </Container>
   );
 };

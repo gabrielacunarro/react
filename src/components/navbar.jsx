@@ -1,4 +1,3 @@
-import React from "react";
 import { Link } from "react-router-dom";
 import { CartWidget } from "./CartWidget";
 
@@ -26,36 +25,24 @@ const NavBar = () => {
               Home
             </Link>
           </li>
-          <li className="nav-item dropdown">
-            <a
-              className="nav-link dropdown-toggle"
-              href="#"
-              id="navbarDropdown"
-              role="button"
-              data-toggle="dropdown"
-              aria-haspopup="true"
-              aria-expanded="false"
-            >
-              Categories
-            </a>
-            <div className="dropdown-menu" aria-labelledby="navbarDropdown">
-              <Link className="dropdown-item" to="/category/1">
-                Perfumes
-              </Link>
-              <Link className="dropdown-item" to="/category/2">
-                Maquillajes
-              </Link>
-              <Link className="dropdown-item" to="/category/3">
-                Cremas
-              </Link>
-              <Link className="dropdown-item" to="/category/4">
-                Spray Corporales
-              </Link>
-            </div>
+          <li className="nav-item">
+            <Link className="nav-link" to="/category/1">
+              Perfumes
+            </Link>
           </li>
           <li className="nav-item">
-            <Link className="nav-link" to="/cart">
-              Cart
+            <Link className="nav-link" to="/category/2">
+              Maquillajes
+            </Link>
+          </li>
+          <li className="nav-item">
+            <Link className="nav-link" to="/category/3">
+              Cremas
+            </Link>
+          </li>
+          <li className="nav-item">
+            <Link className="nav-link" to="/category/4">
+              Spray Corporales
             </Link>
           </li>
           <li className="nav-item">
@@ -63,13 +50,16 @@ const NavBar = () => {
               Profile
             </Link>
           </li>
+          <li className="nav-item">
+            <Link className="nav-link" to="/cart">
+              <CartWidget />
+            </Link>
+          </li>
         </ul>
-        <CartWidget />
       </div>
     </nav>
   );
 };
 
 export default NavBar;
-
 
