@@ -4,7 +4,7 @@ import "bootstrap-icons/font/bootstrap-icons.css";
 import "./App.css";
 import NavBar from "./components/navbar.jsx";
 import { ItemListContainer } from "./components/ItemListContainer.jsx";
-import { ProductDetail } from "./views/productDetail.jsx";
+import { ItemDetailContainer } from "./views/ItemDetailContainer.jsx";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 
 function App() {
@@ -12,8 +12,9 @@ function App() {
     <BrowserRouter>
       <NavBar />
       <Routes>
-        <Route path = "/" element= {<ItemListContainer/>}></Route>
-        <Route path = "products/:id" element= {<ProductDetail/>}></Route>
+        <Route path="/" element={<ItemListContainer />}></Route>
+        <Route path="/category/:id" element={<ItemListContainer />}></Route>
+        <Route path="/item/:id" element={<ItemDetailContainer />}></Route>
       </Routes>
     </BrowserRouter>
   );
