@@ -1,4 +1,3 @@
-import React from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap-icons/font/bootstrap-icons.css";
 import "./App.css";
@@ -6,16 +5,25 @@ import NavBar from "./components/navbar.jsx";
 import { ItemListContainer } from "./components/ItemListContainer.jsx";
 import { ItemDetailContainer } from "./views/ItemDetailContainer.jsx";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { Cart } from "./components/Cart.jsx";
+import Footer from "./components/Footer.jsx"
+import { Provider } from "./contexts/ItemsContext.jsx";
+import { Thanks } from './views/Thanks';
 
 function App() {
   return (
     <BrowserRouter>
-      <NavBar />
-      <Routes>
-        <Route path="/" element={<ItemListContainer />}></Route>
-        <Route path="/category/:id" element={<ItemListContainer />}></Route>
-        <Route path="/item/:id" element={<ItemDetailContainer />}></Route>
-      </Routes>
+      <Provider>
+        <NavBar />
+        <Routes>
+          <Route path="/" element={<ItemListContainer />}></Route>
+          <Route path="/category/:id" element={<ItemListContainer />}></Route>
+          <Route path="/item/:id" element={<ItemDetailContainer />}></Route>
+          <Route path="/cart" element={<Cart />} />
+          <Route path="/thanks" element={<Thanks />} />
+        </Routes>
+        <Footer />
+      </Provider>
     </BrowserRouter>
   );
 }

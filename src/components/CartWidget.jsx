@@ -1,4 +1,15 @@
+import { useContext } from 'react';
+import { ItemsContext } from '../contexts/ItemsContext.jsx';
 
 export const CartWidget = () => {
-  return <i className="bi bi-cart">7</i>;
+    const { getTotalItems } = useContext(ItemsContext);
+
+    return (
+        <div>
+            <i className="bi bi-cart"></i>
+            <span>{getTotalItems()}</span>
+        </div>
+    );
 };
+
+

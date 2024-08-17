@@ -26,28 +26,23 @@ const NavBar = () => {
             </Link>
           </li>
           <li className="nav-item">
-            <Link className="nav-link" to="/category/1">
+            <Link className="nav-link" to="/category/perfumes">
               Perfumes
             </Link>
           </li>
           <li className="nav-item">
-            <Link className="nav-link" to="/category/2">
-              Maquillajes
+            <Link className="nav-link" to="/category/makeup">
+              Makeup
             </Link>
           </li>
           <li className="nav-item">
-            <Link className="nav-link" to="/category/3">
-              Cremas
+            <Link className="nav-link" to="/category/skinCare">
+              Skin Care
             </Link>
           </li>
           <li className="nav-item">
-            <Link className="nav-link" to="/category/4">
-              Spray Corporales
-            </Link>
-          </li>
-          <li className="nav-item">
-            <Link className="nav-link" to="/profile">
-              Profile
+            <Link className="nav-link" to="/category/bodySpray">
+              Body Spray
             </Link>
           </li>
           <li className="nav-item">

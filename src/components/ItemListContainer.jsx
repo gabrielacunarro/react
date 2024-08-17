@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { Link, useParams } from "react-router-dom";
-import data from "../data/products.json";
+import { getFirestore, getDocs, where, query, collection } from "firebase/firestore";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { Container } from "react-bootstrap";
 import ReactLoading from 'react-loading';
@@ -11,27 +11,32 @@ export const ItemListContainer = () => {
   const { id } = useParams();
 
   useEffect(() => {
-    new Promise((resolve) => {
-      setTimeout(() => resolve(data), 2000);
+    const db = getFirestore();
+
+    const refCollection = !id
+      ? collection(db, "items")
+      : query(
+        collection(db, "items"), where("categoryId", "==", id)
+      )
+
+    getDocs(refCollection).then((snapshot) => {
+      setItems(
+        snapshot.docs.map((doc) => {
+          return { id: doc.id, ...doc.data() }
+        })
+      )
     })
-      .then((res) => {
-        const filteredProducts = id
-          ? res.filter((product) => product.categoryId === Number(id))
-          : res;
-        setItems(filteredProducts);
-      })
-      .finally(() => {
-        setLoading(false);
-      });
+      .finally(() => setLoading(false))
   }, [id]);
+
 
   if (loading) {
     return (
-      <Container className="text-center mt-4">
-        <ReactLoading type="spin" color="#000" />
-      </Container>
+        <Container className="spinner">
+            <ReactLoading type="spin" color="#000" />
+        </Container>
     );
-  }
+}
 
   if (items.length === 0) {
     return <Container className="text-center mt-4">There arent any products yet...</Container>;
@@ -44,10 +49,9 @@ export const ItemListContainer = () => {
           <div key={item.id} className="col-md-4 mb-4">
             <div className="card h-100">
               <img
-                src={item.image}
-                className="card-img-top"
+                src={item.imageId}
+                className="card-img"
                 alt={item.title}
-                style={{ height: "200px", objectFit: "cover" }}
               />
               <div className="card-body">
                 <h5 className="card-title">{item.title}</h5>

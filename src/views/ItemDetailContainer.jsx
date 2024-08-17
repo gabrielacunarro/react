@@ -1,35 +1,55 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import { useParams } from "react-router-dom";
-import products from "../data/products.json";
+import { getFirestore, getDoc, doc } from "firebase/firestore";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { Container, Card } from "react-bootstrap";
+import ReactLoading from 'react-loading';
+import { ItemCount } from "../components/ItemCount.jsx";
+import { ItemsContext } from "../contexts/ItemsContext.jsx";
 
 export const ItemDetailContainer = () => {
-  const [selectedProduct, setSelectedProduct] = useState(null);
-  const { id } = useParams();
+    const [item, setItem] = useState(null);
+    const [loading, setLoading] = useState(true);
+    const { id } = useParams();
+    const { addItem } = useContext(ItemsContext)
 
-  useEffect(() => {
-    const product = products.find((product) => product.id === Number(id));
-    setSelectedProduct(product);
-  }, [id]);
 
-  if (!selectedProduct) return <Container className="mt-4">Loading...</Container>;
+    useEffect(() => {
+        const db = getFirestore();
+        const refDoc = doc(db, 'items', id);
 
-  return (
-    <Container className="mt-4 d-flex justify-content-center">
-      <Card style={{ width: '20rem', maxWidth: '100%' }}>
-        <Card.Img variant="top" src={selectedProduct.image} alt={selectedProduct.title} />
-        <Card.Body>
-          <Card.Title>{selectedProduct.title}</Card.Title>
-          <Card.Text>
-            {selectedProduct.detail}
-          </Card.Text>
-          <Card.Text>
-            <strong>Price: ${selectedProduct.price}</strong>
-          </Card.Text>
-        </Card.Body>
-      </Card>
-    </Container>
-  );
+        getDoc(refDoc)
+            .then((snapshot) => {
+                setItem({ id: snapshot.id, ...snapshot.data() });
+            })
+            .finally(() => setLoading(false));
+    }, [id]);
+
+    const onAdd = (count) => {
+        addItem({ ...item, quantity: count })
+    }
+
+    if (loading) {
+        return (
+            <Container className="spinner">
+                <ReactLoading type="spin" color="#000" />
+            </Container>
+        );
+    }
+
+    if (!item) return <Container className="mt-4"></Container>;
+
+    return (
+        <Container className="mt-4 d-flex justify-content-center">
+            <Card className="detail">
+                <Card.Img variant="top" src={item.imageId} alt={item.title} />
+                <Card.Body>
+                    <h1>{item.title}</h1>
+                    <p>{item.description}</p>
+                    <h4><strong>Price: ${item.price}</strong></h4>
+                    <ItemCount stock={item.stock} onAdd={onAdd} />
+                </Card.Body>
+            </Card>
+        </Container>
+    );
 };
-
