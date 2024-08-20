@@ -4,6 +4,7 @@ import { getFirestore, getDocs, where, query, collection } from "firebase/firest
 import "bootstrap/dist/css/bootstrap.min.css";
 import { Container } from "react-bootstrap";
 import ReactLoading from 'react-loading';
+import NotFound from "../views/NotFound";
 
 export const ItemListContainer = () => {
   const [items, setItems] = useState([]);
@@ -17,44 +18,46 @@ export const ItemListContainer = () => {
       ? collection(db, "items")
       : query(
         collection(db, "items"), where("categoryId", "==", id)
-      )
+      );
 
-    getDocs(refCollection).then((snapshot) => {
-      setItems(
-        snapshot.docs.map((doc) => {
-          return { id: doc.id, ...doc.data() }
-        })
-      )
-    })
-      .finally(() => setLoading(false))
+    getDocs(refCollection)
+      .then((snapshot) => {
+        setItems(
+          snapshot.docs.map((doc) => ({
+            id: doc.id,
+            ...doc.data()
+          }))
+        );
+      })
+      .finally(() => setLoading(false));
   }, [id]);
-
 
   if (loading) {
     return (
-        <Container className="spinner">
-            <ReactLoading type="spin" color="#000" />
-        </Container>
+      <Container className="spinner">
+        <ReactLoading type="spin" color="#000" />
+      </Container>
     );
-}
+  }
 
   if (items.length === 0) {
-    return <Container className="text-center mt-4">There arent any products yet...</Container>;
+    return <NotFound />;  
   }
 
   return (
-    <Container className="mt-4">
+    <Container className="mt-2">
       <div className="row">
         {items.map((item) => (
           <div key={item.id} className="col-md-4 mb-4">
             <div className="card h-100">
               <img
                 src={item.imageId}
-                className="card-img"
+                className="card-img-top"
                 alt={item.title}
               />
               <div className="card-body">
                 <h5 className="card-title">{item.title}</h5>
+                <hr className="my-3" /> 
                 <Link to={`/item/${item.id}`} className="btn btn-primary">
                   See more
                 </Link>

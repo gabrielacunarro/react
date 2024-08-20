@@ -41,8 +41,8 @@ const NavBar = () => {
             </Link>
           </li>
           <li className="nav-item">
-            <Link className="nav-link" to="/category/bodySpray">
-              Body Spray
+            <Link className="nav-link" to="/category/bodySplash">
+              Body Splash
             </Link>
           </li>
           <li className="nav-item">

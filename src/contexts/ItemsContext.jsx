@@ -7,23 +7,26 @@ export const Provider = ({ children }) => {
     const [items, setItems] = useState([]);
 
     const addItem = (item) => {
-        const alreadyExists = items.some((i) => i.id === item.id);
+        const { id, quantity } = item;
+        const alreadyExists = items.some((i) => i.id === id);
 
         if (alreadyExists) {
-            const transform = items.map(i => {
-                if (i.id === item.id) {
-                    return { ...i, quantity: i.quantity + item.quantity }
+            const updatedItems = items.map(i => {
+                if (i.id === id) {
+                    return { ...i, quantity: i.quantity + quantity };
                 } else {
-                    return i
+                    return i;
                 }
             });
-            setItems(transform)
+            setItems(updatedItems);
         } else {
-            setItems((prev) => [...prev, item]);
+            setItems(prev => [...prev, item]);
         }
     };
 
-    const getTotalItems = () => items.length;
+    const getTotalItems = () => {
+        return items.reduce((acc, item) => acc + item.quantity, 0);
+    };
 
     const clearItems = () => {
         setItems([]);

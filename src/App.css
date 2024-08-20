@@ -57,12 +57,15 @@ footer {
   display: flex;
   justify-content: center;
   align-items: center;
+  flex: 1; 
+  padding-bottom: 60px; 
 }
 
 /* Estilos para la tarjeta general */
 .card {
+  margin-top: 15px;
   width: 300px; 
-  max-height: 400px; 
+  max-height: 700px; 
   border-radius: 8px;
   overflow: hidden;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
@@ -70,11 +73,13 @@ footer {
   display: flex;
   flex-direction: column;
   background-color: #ffffff; 
+  text-align: center;
+  margin-bottom: 60px;
 }
 
 .card img {
-  width: 100%; 
-  height: 250px;
+  width: auto; 
+  height: 200px;
   object-fit: cover; 
 }
 
@@ -85,21 +90,20 @@ footer {
 
 /* Estilos para la tarjeta de detalle */
 .detail {
-  width: 200px; 
-  max-height: 800px; 
+  width: auto; /* Ocupa el ancho disponible del contenedor */
+  max-width: auto; /* Tamaño máximo de la tarjeta */
   border-radius: 8px;
   overflow: hidden;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   transition: transform 0.3s, box-shadow 0.3s;
   display: flex;
   flex-direction: column;
-  background-color: #ffffff; 
+  background-color: #ffffff;
 }
 
 .detail img {
-  width: 100%; 
-  height: auto; 
-  object-fit: cover; 
+  width: 20%; 
+  height: auto;
   border-radius: 8px 8px 0 0; 
   display: block; 
   margin: 0 auto; 
@@ -232,6 +236,17 @@ input {
   font-size: 0.875em;
   margin-top: 0.25em;
   display: block;
+}
+
+.emptycart {
+  display: grid;
+  place-items: center; 
+  height: 80vh; 
+  text-align: center;
+}
+
+::-webkit-scrollbar {
+  display: none;
 }
 
 

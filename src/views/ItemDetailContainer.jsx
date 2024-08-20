@@ -6,13 +6,13 @@ import { Container, Card } from "react-bootstrap";
 import ReactLoading from 'react-loading';
 import { ItemCount } from "../components/ItemCount.jsx";
 import { ItemsContext } from "../contexts/ItemsContext.jsx";
+import NotFound from "./NotFound.jsx";
 
 export const ItemDetailContainer = () => {
     const [item, setItem] = useState(null);
     const [loading, setLoading] = useState(true);
     const { id } = useParams();
-    const { addItem } = useContext(ItemsContext)
-
+    const { addItem } = useContext(ItemsContext);
 
     useEffect(() => {
         const db = getFirestore();
@@ -20,14 +20,22 @@ export const ItemDetailContainer = () => {
 
         getDoc(refDoc)
             .then((snapshot) => {
-                setItem({ id: snapshot.id, ...snapshot.data() });
+                if (snapshot.exists()) {
+                    setItem({ id: snapshot.id, ...snapshot.data() });
+                } else {
+                    setItem(null); 
+                }
+            })
+            .catch((error) => {
+                console.error("Error fetching item:", error);
+                setItem(null);
             })
             .finally(() => setLoading(false));
     }, [id]);
 
     const onAdd = (count) => {
-        addItem({ ...item, quantity: count })
-    }
+        addItem({ ...item, quantity: count });
+    };
 
     if (loading) {
         return (
@@ -37,7 +45,7 @@ export const ItemDetailContainer = () => {
         );
     }
 
-    if (!item) return <Container className="mt-4"></Container>;
+    if (!item) return <NotFound />;
 
     return (
         <Container className="mt-4 d-flex justify-content-center">

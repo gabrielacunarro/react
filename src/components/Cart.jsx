@@ -12,7 +12,7 @@ const initialValues = {
 
 export const Cart = () => {
     const [buyer, setBuyer] = useState(initialValues);
-    const { items, clearItems } = useContext(ItemsContext);  // Desestructurar clearItems
+    const { items, clearItems } = useContext(ItemsContext); 
     const [loading, setLoading] = useState(false);
     const [errors, setErrors] = useState({});
     const navigate = useNavigate();
@@ -61,8 +61,7 @@ export const Cart = () => {
             const docRef = await addDoc(orderCollection, order);
             alert("Your order: " + docRef.id + " was successfully created");
 
-            // Limpiar el carrito después del checkout
-            clearItems();  // Limpiar el carrito
+            clearItems(); 
             
             setLoading(false);
             navigate('/thanks');
@@ -75,7 +74,7 @@ export const Cart = () => {
     return (
         <>
             {items.length === 0 ? (
-                <p>You have not added any products yet.</p>
+                <p className='emptycart'>You have not added any products yet...</p>
             ) : (
                 <>
                     {items.map((item) => (
