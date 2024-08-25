@@ -1,60 +1,43 @@
+import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { CartWidget } from "./CartWidget";
+import { Navbar, Nav, Container } from 'react-bootstrap';
+import { getFirestore, getDocs, collection } from "firebase/firestore";
 
 const NavBar = () => {
+  const [categories, setCategories] = useState([]);
+
+  useEffect(() => {
+    const fetchCategories = async () => {
+      const db = getFirestore();
+      const categoryCollection = collection(db, "categories");
+      const snapshot = await getDocs(categoryCollection);
+      const categoryList = snapshot.docs.map(doc => doc.data());
+      setCategories(categoryList);
+    };
+
+    fetchCategories();
+  }, []);
+
   return (
-    <nav className="navbar navbar-expand-lg navbar-light bg-light">
-      <Link className="navbar-brand" to="/">
-        Essence Selecto
-      </Link>
-      <button
-        className="navbar-toggler"
-        type="button"
-        data-toggle="collapse"
-        data-target="#navbarNav"
-        aria-controls="navbarNav"
-        aria-expanded="false"
-        aria-label="Toggle navigation"
-      >
-        <span className="navbar-toggler-icon"></span>
-      </button>
-      <div className="collapse navbar-collapse" id="navbarNav">
-        <ul className="navbar-nav">
-          <li className="nav-item">
-            <Link className="nav-link" to="/">
-              Home
-            </Link>
-          </li>
-          <li className="nav-item">
-            <Link className="nav-link" to="/category/perfumes">
-              Perfumes
-            </Link>
-          </li>
-          <li className="nav-item">
-            <Link className="nav-link" to="/category/makeup">
-              Makeup
-            </Link>
-          </li>
-          <li className="nav-item">
-            <Link className="nav-link" to="/category/skinCare">
-              Skin Care
-            </Link>
-          </li>
-          <li className="nav-item">
-            <Link className="nav-link" to="/category/bodySplash">
-              Body Splash
-            </Link>
-          </li>
-          <li className="nav-item">
-            <Link className="nav-link" to="/cart">
-              <CartWidget />
-            </Link>
-          </li>
-        </ul>
-      </div>
-    </nav>
+    <Navbar bg="light" expand="lg">
+      <Container>
+        <Navbar.Brand as={Link} to="/">Essence Selecto</Navbar.Brand>
+        <Navbar.Toggle aria-controls="navbarNav" />
+        <Navbar.Collapse id="navbarNav">
+          <Nav className="me-auto">
+            <Nav.Link as={Link} to="/">Home</Nav.Link>
+            {categories.map(category => (
+              <Nav.Link key={category.key} as={Link} to={`/category/${category.key}`}>
+                {category.description}
+              </Nav.Link>
+            ))}
+            <Nav.Link as={Link} to="/cart"><CartWidget /></Nav.Link>
+          </Nav>
+        </Navbar.Collapse>
+      </Container>
+    </Navbar>
   );
 };
 
 export default NavBar;
-

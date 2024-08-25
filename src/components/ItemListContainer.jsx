@@ -1,71 +1,67 @@
 import { useState, useEffect } from "react";
-import { Link, useParams } from "react-router-dom";
-import { getFirestore, getDocs, where, query, collection } from "firebase/firestore";
+import { useParams, Link } from "react-router-dom";
+import { getFirestore, getDocs, query, collection, where } from "firebase/firestore";
 import "bootstrap/dist/css/bootstrap.min.css";
-import { Container } from "react-bootstrap";
 import ReactLoading from 'react-loading';
 import NotFound from "../views/NotFound";
+import { Container, Row, Col } from 'react-bootstrap';
 
 export const ItemListContainer = () => {
   const [items, setItems] = useState([]);
   const [loading, setLoading] = useState(true);
-  const { id } = useParams();
+  const { key } = useParams();
 
   useEffect(() => {
-    const db = getFirestore();
+    const fetchItems = async () => {
+      const db = getFirestore();
+      const itemsCollection = collection(db, "items");
+      const itemsQuery = key
+        ? query(itemsCollection, where("categoryId", "==", key))
+        : itemsCollection;
 
-    const refCollection = !id
-      ? collection(db, "items")
-      : query(
-        collection(db, "items"), where("categoryId", "==", id)
-      );
+      const snapshot = await getDocs(itemsQuery);
+      const itemsList = snapshot.docs.map(doc => ({
+        id: doc.id,
+        ...doc.data()
+      }));
 
-    getDocs(refCollection)
-      .then((snapshot) => {
-        setItems(
-          snapshot.docs.map((doc) => ({
-            id: doc.id,
-            ...doc.data()
-          }))
-        );
-      })
-      .finally(() => setLoading(false));
-  }, [id]);
+      setItems(itemsList);
+      setLoading(false);
+    };
+
+    fetchItems();
+  }, [key]);
 
   if (loading) {
     return (
-      <Container className="spinner">
+      <div className="spinner">
         <ReactLoading type="spin" color="#000" />
-      </Container>
+      </div>
     );
   }
 
   if (items.length === 0) {
-    return <NotFound />;  
+    return <NotFound />;
   }
 
   return (
-    <Container className="mt-2">
-      <div className="row">
-        {items.map((item) => (
-          <div key={item.id} className="col-md-4 mb-4">
-            <div className="card h-100">
-              <img
-                src={item.imageId}
-                className="card-img-top"
-                alt={item.title}
-              />
+    <Container className="mt-4">
+      <Row className="g-4">
+        {items.map(item => (
+          <Col xs={12} sm={6} md={4} lg={3} key={item.id}>
+            <div className="card h-100 text-center">
+              <img src={item.imageId} className="card-img-top" alt={item.title} />
               <div className="card-body">
                 <h5 className="card-title">{item.title}</h5>
-                <hr className="my-3" /> 
+                <hr className="my-3" />
                 <Link to={`/item/${item.id}`} className="btn btn-primary">
                   See more
                 </Link>
               </div>
             </div>
-          </div>
+          </Col>
         ))}
-      </div>
+      </Row>
     </Container>
   );
 };
